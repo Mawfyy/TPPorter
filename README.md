@@ -1,12 +1,5 @@
-# tpconverter
 
-Simple program that convert Uhd textures to hd
 
-(You need to have the plist file and the relative png in the same folder)
-
-usage :
-
-converter.py -i uhd-sheet.plist -o hd-sheet.plist
 # Texture Pack Porter
 
 A simple program to port any of your texture packs from high graphics to medium or low graphic, or from medium to low graphic(With a not so high quality and accuracy but good enough)
