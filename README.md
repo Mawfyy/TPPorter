@@ -22,5 +22,5 @@ As you can see in screenshot 2, you can also port a high texture file directly t
 
 # Warnings and disclaimers:
 
-You must not have the numbers of files input and output being different or it will break(really obvious but idc)
-This script is not an artificial intelligence, so the accuracy for ports will differ between certain packs, so please don't send issues about this
+
+
