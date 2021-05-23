@@ -16,6 +16,10 @@ Some usage examples:
 
 As you can see in screenshot 2, you can also port a high texture file directly to the low graphic version of its counterpart. It isn't gonna be used very much, but can we all agree that low graphics look funny?
 
+
+# Requirements
+![requirements.txt](https://github.com/Weebifying/TPPorter/blob/main/requirements.txt)
+
 # Warnings and disclaimers:
 
 You must not have the numbers of files input and output being different or it will break(really obvious but idc)
