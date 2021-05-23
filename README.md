@@ -20,7 +20,7 @@ As you can see in screenshot 2, you can also port a high texture file directly t
 # Requirements
 [requirements.txt](https://github.com/Weebifying/TPPorter/blob/main/requirements.txt)
 
-# Warnings and disclaimers:
+
 
 
 
