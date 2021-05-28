@@ -14,11 +14,15 @@ Some usage examples:
 ![A funny example](https://cdn.discordapp.com/attachments/776630512327458837/845705289382625380/Screenshot_2021-05-22-23-47-59-580_com.termux.png)
 ![Another one](https://cdn.discordapp.com/attachments/776630512327458837/845705300447330324/Screenshot_2021-05-22-23-50-33-821_com.termux.png)
 
-As you can see in screenshot 2, you can also port a high texture file directly to the low graphic version of its counterpart. It isn't gonna be used very much, but can we all agree that low graphics look funny?
-
 
 # Requirements
-[requirements.txt](https://github.com/Weebifying/TPPorter/blob/main/requirements.txt)
+
+You will need the latest version of Python and one of it's module, `opencv-python`, installed.
+
+For Termux users, you can instead install the `opencv` package by these commands:
+```curl -LO https://its-pointless.github.io/setup-pointless-repo.sh
+bash setup-pointless-repo.sh
+pkg install opencv```
 
 
 
