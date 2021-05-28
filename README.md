@@ -20,9 +20,11 @@ Some usage examples:
 You will need the latest version of Python and one of it's module, `opencv-python`, installed.
 
 For Termux users, you can instead install the `opencv` package by these commands:
-```curl -LO https://its-pointless.github.io/setup-pointless-repo.sh
+```
+curl -LO https://its-pointless.github.io/setup-pointless-repo.sh
 bash setup-pointless-repo.sh
-pkg install opencv```
+pkg install opencv
+```
 
 
 
