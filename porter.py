@@ -44,6 +44,11 @@ for w in removal:
 
 
 print("Files input:%s(not including invalid files)" % str(len(fileI)))
+if args.low:
+    print("Porting mode: All elements to low graphics.")
+else:
+    print("Porting mode: All elements to one graphics level lower.")
+
 print("Getting there...")
 
 if True:
@@ -205,7 +210,7 @@ if True:
                 
                 
                 f.close()
-                f = open(fnt_data["page"]["file"].replace('"',''),'wt')
+                f = open(file[w].replace("-hd",""),'wt')
                 
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
@@ -247,7 +252,7 @@ if True:
             
             
                 f.close()
-                f = open(fnt_data["page"]["file"].replace('"',''),'wt')
+                f = open(file[w].replace("uhd","hd"),'wt')
             
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
@@ -282,13 +287,13 @@ if True:
                     key[1]["height"]=str(floor(int(key[1]["height"])/4))
                     key[1]["xoffset"]=str(ceil(int(key[1]["xoffset"])/4))
                     key[1]["yoffset"]=str(ceil(int(key[1]["yoffset"])/4))
-                    key[1]["xadvance"]=str(ceil(int(key[1]["xadvance"])/2))
+                    key[1]["xadvance"]=str(ceil(int(key[1]["xadvance"])/4))
                 for key in dictKern:
                     key[1]["amount"]=str(ceil(int(key[1]["amount"])/4))
             
             
                 f.close()
-                f = open(fnt_data["page"]["file"].replace('"',''),'wt')
+                f = open(file[w].replace("-uhd",""),'wt')
             
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
