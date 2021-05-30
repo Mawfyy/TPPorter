@@ -51,9 +51,9 @@ else:
 
 print("Getting there...")
 
-if True:
-    for w in range(0,len(fileI)):
-
+for w in range(0,len(fileI)):
+    
+    try:
         filenameInput, file_extensionInput = os.path.splitext(fileI[w])
         
         if file_extensionInput == ".plist":
@@ -322,7 +322,6 @@ if True:
                 height = ceil(im.shape[0] / 4 )
                 dim = (width, height)
                 resized = cv2.resize(im, dim, interpolation = cv2.INTER_AREA)
-
                 cv2.imwrite(filenameInput.replace("-uhd","") + ".png",resized)
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
                 if (w+1) == len(fileI):
@@ -360,5 +359,9 @@ if True:
         else:
             print("WHAT THE FUCK HOW DID THIS FUCKING FILE(%s) GET PASS MY TRASH FILES REMOVAL SYSTEM LOL" % fileI[w])
 
-else:
-    print ("BRO I DONT FUCKING WANT TO DELETE 350 INDENTATIONS LOL")
+    except Exception as e: 
+        print()
+        print("An error occured with this file: %s. Please check the file if it is corrupted or in the wrong format for a GD texturepack standpoint." % fileI[w])
+        print("Error logged: ")
+        print(e)
+        print()
