@@ -210,7 +210,7 @@ if True:
                 
                 
                 f.close()
-                f = open(file[w].replace("-hd",""),'wt')
+                f = open((fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt"),'wt')
                 
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
@@ -252,7 +252,7 @@ if True:
             
             
                 f.close()
-                f = open(file[w].replace("uhd","hd"),'wt')
+                f =open((fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt"),'wt')
             
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
@@ -293,7 +293,7 @@ if True:
             
             
                 f.close()
-                f = open(file[w].replace("-uhd",""),'wt')
+                f = open((fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt"),'wt')
             
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
