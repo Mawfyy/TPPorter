@@ -28,7 +28,7 @@ You will need the latest version of Python and one of it's module, `opencv-pytho
 python3 -m pip install opencv-python
 ```
 
-For Termux users, you can instead install the `opencv` package by these commands:
+For Termux(Android's Terminal emulator) users, you can instead install the `opencv` package by these commands:
 ```
 curl -LO https://its-pointless.github.io/setup-pointless-repo.sh
 bash setup-pointless-repo.sh
