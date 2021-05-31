@@ -23,7 +23,10 @@ Some usage examples:
 
 # Requirements
 
-You will need the latest version of Python and one of it's module, `opencv-python`, installed.
+You will need the latest version of Python and one of it's module, `opencv-python`, installed, using this command:
+```
+python3 -m pip install opencv-python
+```
 
 For Termux users, you can instead install the `opencv` package by these commands:
 ```
