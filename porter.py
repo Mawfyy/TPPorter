@@ -34,13 +34,20 @@ removal= []
 for w in range(0,len(fileI)):
     filenameInput, file_extensionInput = os.path.splitext(fileI[w])
     
-    if file_extensionInput != ".plist" and file_extensionInput != ".png" and file_extensionInput != ".fnt":
+    if (file_extensionInput != ".plist" and file_extensionInput != ".png" and file_extensionInput != ".fnt") or filenameInput[-4:] == "Desc" or filenameInput[-6:] == "DescMD" or filenameInput[-6:] == "Effect" or filenameInput[-6:] == "effect" or filenameInput[-7:] == "Effect2" or filenameInput[-4:] == "Open" or filenameInput[-6:] == "Opened" or filenameInput == "circle" or filenameInput[-12:] == "EffectPortal" or filenameInput[-10:] == "EffectGrav" or filenameInput[-12:] == "EffectVortex" or filenameInput == "firework" or filenameInput[-5:] == "Desc2" or filenameInput[-9:] == "Destroy01" or filenameInput[-10:] == "EffectIcon" or filenameInput[-3:] == "001" or filenameInput[-10:] == "Complete01" or filenameInput[:9] == "LevelData" or filenameInput == "LoadData" or filenameInput[-11:] == "Definitions" or filenameInput[:7] == "portalE" or filenameInput[:5] == "Skull" or filenameInput[:6] == "speedE" or filenameInput[-8:] == "Effect01" or filenameInput == "starFall" or filenameInput == "stoneHit" or filenameInput[:6] == "streak" or filenameInput == "sun":
         removal.append(w)
 
 removal.reverse()
 
 for w in removal:
     fileI.pop(w)
+
+print("\nCreating a folder for the ported tp(s)...")
+try:
+    os.mkdir('Ported')
+except:
+    print("Folder already created, skipping...\n")
+directory = directory + r"/Ported"
 
 
 print("Files input:%s(not including invalid files)" % str(len(fileI)))
@@ -50,6 +57,9 @@ else:
     print("Porting mode: All elements to one graphics level lower.")
 
 print("Getting there...")
+
+if len(fileI)==0:
+    print("\nUhhh, do you mind if you check the texture pack if there is actually any valid file?\n")
 
 for w in range(0,len(fileI)):
     
@@ -88,7 +98,7 @@ for w in range(0,len(fileI)):
                 plist_data["metadata"]["textureFileName"] = plist_data["metadata"]["textureFileName"].replace("-hd","")
                 
                 
-                f = open(plist_data["metadata"]["textureFileName"].replace(".png",".plist"), 'wb')
+                f = open(os.path.join(directory, plist_data["metadata"]["textureFileName"].replace(".png",".plist")), 'wb')
                 
                 plistlib.dump(plist_data,f)
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
@@ -116,7 +126,7 @@ for w in range(0,len(fileI)):
                 plist_data["metadata"]["textureFileName"] = plist_data["metadata"]["textureFileName"].replace("-uhd","")
                 
                 
-                f = open(plist_data["metadata"]["textureFileName"].replace(".png",".plist"), 'wb')
+                f = open(os.path.join(directory, plist_data["metadata"]["textureFileName"].replace(".png",".plist")), 'wb')
                 
                 plistlib.dump(plist_data,f)
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
@@ -144,7 +154,7 @@ for w in range(0,len(fileI)):
                 plist_data["metadata"]["textureFileName"] = plist_data["metadata"]["textureFileName"].replace("uhd","hd")
                 
                 
-                f = open(plist_data["metadata"]["textureFileName"].replace(".png",".plist"), 'wb')
+                f = open(os.path.join(directory, plist_data["metadata"]["textureFileName"].replace(".png",".plist")), 'wb')
                 
                 plistlib.dump(plist_data,f)
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
@@ -155,34 +165,47 @@ for w in range(0,len(fileI)):
                 print("Invalid file(" + fileI[w] + ")! Your input file must be in either high, medium graphic and have the correct name from the resource folder.")
                 
         elif file_extensionInput == ".fnt":
+            
+            exceptChar=False
+            exceptKern=False
+            
             with open(fileI[w]) as f:
                 file=f.read()
             
             fnt_data=dict()
             
-            fnt_data["info"]= re.search(r'info face=(?P<face>[\s\w"-]+) size=(?P<size>\w+) bold=(?P<bold>\w+) italic=(?P<italic>\w+) charset=(?P<charset>[\w"]+) unicode=(?P<unicode>\w+) stretchH=(?P<stretchH>\w+) smooth=(?P<smooth>\w+) aa=(?P<aa>\w+) padding=(?P<padding>[\w,-]+) spacing=(?P<spacing>[\w,-]+)', file).groupdict()
+            fnt_data["info"]= re.search(r'info face=(?P<face>[\s\w."-]+) size=(?P<size>\w+) bold=(?P<bold>\w+) italic=(?P<italic>\w+) charset=(?P<charset>[\w"]+) unicode=(?P<unicode>\w+) stretchH=(?P<stretchH>\w+) smooth=(?P<smooth>\w+) aa=(?P<aa>\w+) padding=(?P<padding>[\w,-]+) spacing=(?P<spacing>[\w,-]+)', file).groupdict()
             fnt_data["common"]= re.search(r'common lineHeight=(?P<lineHeight>\w+) base=(?P<base>\w+) scaleW=(?P<scaleW>\w+) scaleH=(?P<scaleH>\w+) pages=(?P<pages>\w+) packed=(?P<packed>\w+)', file).groupdict()
             fnt_data["page"]= re.search(r'page id=(?P<id>\w+) file=(?P<file>[\w"-.]+)', file).groupdict()
-            fnt_data["chars count"]= re.search('(?<=chars count=)(.*)(?=\nchar)', file).group()
-            fnt_data["char"]=dict()
             
-            f=open(fileI[w])
-            f.readline()
-            f.readline()
-            f.readline()
-            f.readline()
+            try:
+                fnt_data["chars count"]= re.search('(?<=chars count=)(.*)(?=\nchar)', file).group()
+                fnt_data["char"]=dict()
+            except AttributeError:
+                exceptChar=True
             
-            for xd in range(0,int(fnt_data["chars count"])):
-                fCurrentLine=f.readline()
-                fnt_data["char"]["char " + str(xd)]= re.search(r'char[ ]+id=(?P<id>\w+)[ ]+x=(?P<x>\w+)[ ]+y=(?P<y>\w+)[ ]+width=(?P<width>\w+)[ ]+height=(?P<height>\w+)[ ]+xoffset=(?P<xoffset>[\w-]+)[ ]+yoffset=(?P<yoffset>[\w-]+)[ ]+xadvance=(?P<xadvance>[\w-]+)[ ]+page=(?P<page>\w+)[ ]+chnl=(?P<chnl>\w+)', fCurrentLine).groupdict()
+            if exceptChar==False:
+                f=open(fileI[w])
+                f.readline()
+                f.readline()
+                f.readline()
+                f.readline()
+            
+                for xd in range(0,int(fnt_data["chars count"])):
+                    fCurrentLine=f.readline()
+                    fnt_data["char"]["char " + str(xd)]= re.search(r'char[ ]+id=(?P<id>\w+)[ ]+x=(?P<x>\w+)[ ]+y=(?P<y>\w+)[ ]+width=(?P<width>\w+)[ ]+height=(?P<height>\w+)[ ]+xoffset=(?P<xoffset>[\w-]+)[ ]+yoffset=(?P<yoffset>[\w-]+)[ ]+xadvance=(?P<xadvance>[\w-]+)[ ]+page=(?P<page>\w+)[ ]+chnl=(?P<chnl>\w+)', fCurrentLine).groupdict()
                 
-            fnt_data["kernings count"]= re.search('(?<=kernings count=)(.*)(?=\nkerning)', file).group()
-            fnt_data["kerning"]=dict()
-            
-            f.readline()
-            for xd in range(0,int(fnt_data["kernings count"])):
-                fCurrentLine=f.readline()
-                fnt_data["kerning"]["kerning " + str(xd)]= re.search(r'[ ]+first=(?P<first>\w+)[ ]+second=(?P<second>\w+)[ ]+amount=(?P<amount>[\w-]+)', fCurrentLine).groupdict()
+            try:
+                fnt_data["kernings count"]= re.search('(?<=kernings count=)(.*)(?=\nkerning)', file).group()
+                fnt_data["kerning"]=dict()
+            except AttributeError:
+                exceptKern=True
+                
+            if exceptKern==False:
+                f.readline()
+                for xd in range(0,int(fnt_data["kernings count"])):
+                    fCurrentLine=f.readline()
+                    fnt_data["kerning"]["kerning " + str(xd)]= re.search(r'[ ]+first=(?P<first>\w+)[ ]+second=(?P<second>\w+)[ ]+amount=(?P<amount>[\w-]+)', fCurrentLine).groupdict()
             
             
             if filenameInput[-3:]=="-hd":
@@ -194,33 +217,39 @@ for w in range(0,len(fileI)):
                 fnt_data["common"]["scaleH"]= str(ceil(int(fnt_data["common"]["scaleH"]) / 2))
                 fnt_data["page"]["file"]=fnt_data["page"]["file"].replace("-hd", "")
                 
-                dictChar = fnt_data.get("char").items()
-                dictKern = fnt_data.get("kerning").items()
+                if exceptChar==False:
+                    dictChar = fnt_data.get("char").items()
+                if exceptKern==False:
+                    dictKern = fnt_data.get("kerning").items()
                 
-                for key in dictChar:
-                    key[1]["x"]=str(ceil(int(key[1]["x"])/2))
-                    key[1]["y"]=str(ceil(int(key[1]["y"])/2))
-                    key[1]["width"]=str(floor(int(key[1]["width"])/2))
-                    key[1]["height"]=str(floor(int(key[1]["height"])/2))
-                    key[1]["xoffset"]=str(ceil(int(key[1]["xoffset"])/2))
-                    key[1]["yoffset"]=str(ceil(int(key[1]["yoffset"])/2))
-                    key[1]["xadvance"]=str(ceil(int(key[1]["xadvance"])/2))
-                for key in dictKern:
-                    key[1]["amount"]=str(ceil(int(key[1]["amount"])/2))
+                if exceptChar==False:
+                    for key in dictChar:
+                        key[1]["x"]=str(ceil(int(key[1]["x"])/2))
+                        key[1]["y"]=str(ceil(int(key[1]["y"])/2))
+                        key[1]["width"]=str(floor(int(key[1]["width"])/2))
+                        key[1]["height"]=str(floor(int(key[1]["height"])/2))
+                        key[1]["xoffset"]=str(ceil(int(key[1]["xoffset"])/2))
+                        key[1]["yoffset"]=str(ceil(int(key[1]["yoffset"])/2))
+                        key[1]["xadvance"]=str(ceil(int(key[1]["xadvance"])/2))
+                if exceptKern==False:
+                    for key in dictKern:
+                        key[1]["amount"]=str(ceil(int(key[1]["amount"])/2))
                 
                 
                 f.close()
-                f = open((fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt"),'wt')
+                f = open(os.path.join(directory, (fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt")),'wt')
                 
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
                 f.write('\npage id=%s file=%s' % (fnt_data["page"]["id"], fnt_data["page"]["file"]))
-                f.write('\nchars count=%s' % (fnt_data["chars count"]))
-                for key in dictChar:
-                    f.write('\nchar id=%s     x=%s   y=%s   width=%s   height=%s   xoffset=%s   yoffset=%s   xadvance=%s   page=%s   chnl=%s' % (key[1]["id"], key[1]["x"], key[1]["y"], key[1]["width"], key[1]["height"], key[1]["xoffset"], key[1]["yoffset"], key[1]["xadvance"], key[1]["page"], key[1]["chnl"]))
-                f.write('\nkernings count=%s' % (fnt_data["kernings count"]))
-                for key in dictKern:
-                    f.write('\nkerning first=%s second=%s amount=%s' % (key[1]["first"], key[1]["second"], key[1]["amount"]))
+                if exceptChar==False:
+                    f.write('\nchars count=%s' % (fnt_data["chars count"]))
+                    for key in dictChar:
+                        f.write('\nchar id=%s     x=%s   y=%s   width=%s   height=%s   xoffset=%s   yoffset=%s   xadvance=%s   page=%s   chnl=%s' % (key[1]["id"], key[1]["x"], key[1]["y"], key[1]["width"], key[1]["height"], key[1]["xoffset"], key[1]["yoffset"], key[1]["xadvance"], key[1]["page"], key[1]["chnl"]))
+                if exceptKern==False:
+                    f.write('\nkernings count=%s' % (fnt_data["kernings count"]))
+                    for key in dictKern:
+                        f.write('\nkerning first=%s second=%s amount=%s' % (key[1]["first"], key[1]["second"], key[1]["amount"]))
                 
                 
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
@@ -236,33 +265,39 @@ for w in range(0,len(fileI)):
                 fnt_data["common"]["scaleH"]= str(ceil(int(fnt_data["common"]["scaleH"]) / 2))
                 fnt_data["page"]["file"]=fnt_data["page"]["file"].replace("uhd", "hd")
                 
-                dictChar = fnt_data.get("char").items()
-                dictKern = fnt_data.get("kerning").items()
+                if exceptChar==False:
+                    dictChar = fnt_data.get("char").items()
+                if exceptKern==False:
+                    dictKern = fnt_data.get("kerning").items()
                 
-                for key in dictChar:
-                    key[1]["x"]=str(ceil(int(key[1]["x"])/2))
-                    key[1]["y"]=str(ceil(int(key[1]["y"])/2))
-                    key[1]["width"]=str(floor(int(key[1]["width"])/2))
-                    key[1]["height"]=str(floor(int(key[1]["height"])/2))
-                    key[1]["xoffset"]=str(ceil(int(key[1]["xoffset"])/2))
-                    key[1]["yoffset"]=str(ceil(int(key[1]["yoffset"])/2))
-                    key[1]["xadvance"]=str(ceil(int(key[1]["xadvance"])/2))
-                for key in dictKern:
-                    key[1]["amount"]=str(ceil(int(key[1]["amount"])/2))
-            
-            
+                if exceptChar==False:
+                    for key in dictChar:
+                        key[1]["x"]=str(ceil(int(key[1]["x"])/2))
+                        key[1]["y"]=str(ceil(int(key[1]["y"])/2))
+                        key[1]["width"]=str(floor(int(key[1]["width"])/2))
+                        key[1]["height"]=str(floor(int(key[1]["height"])/2))
+                        key[1]["xoffset"]=str(ceil(int(key[1]["xoffset"])/2))
+                        key[1]["yoffset"]=str(ceil(int(key[1]["yoffset"])/2))
+                        key[1]["xadvance"]=str(ceil(int(key[1]["xadvance"])/2))
+                if exceptKern==False:
+                    for key in dictKern:
+                        key[1]["amount"]=str(ceil(int(key[1]["amount"])/2))
+                
+                
                 f.close()
-                f =open((fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt"),'wt')
-            
+                f = open(os.path.join(directory, (fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt")),'wt')
+                
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
                 f.write('\npage id=%s file=%s' % (fnt_data["page"]["id"], fnt_data["page"]["file"]))
-                f.write('\nchars count=%s' % (fnt_data["chars count"]))
-                for key in dictChar:
-                    f.write('\nchar id=%s     x=%s   y=%s   width=%s   height=%s   xoffset=%s   yoffset=%s   xadvance=%s   page=%s   chnl=%s' % (key[1]["id"], key[1]["x"], key[1]["y"], key[1]["width"], key[1]["height"], key[1]["xoffset"], key[1]["yoffset"], key[1]["xadvance"], key[1]["page"], key[1]["chnl"]))
-                f.write('\nkernings count=%s' % (fnt_data["kernings count"]))
-                for key in dictKern:
-                    f.write('\nkerning first=%s second=%s amount=%s' % (key[1]["first"], key[1]["second"], key[1]["amount"]))
+                if exceptChar==False:
+                    f.write('\nchars count=%s' % (fnt_data["chars count"]))
+                    for key in dictChar:
+                        f.write('\nchar id=%s     x=%s   y=%s   width=%s   height=%s   xoffset=%s   yoffset=%s   xadvance=%s   page=%s   chnl=%s' % (key[1]["id"], key[1]["x"], key[1]["y"], key[1]["width"], key[1]["height"], key[1]["xoffset"], key[1]["yoffset"], key[1]["xadvance"], key[1]["page"], key[1]["chnl"]))
+                if exceptKern==False:
+                    f.write('\nkernings count=%s' % (fnt_data["kernings count"]))
+                    for key in dictKern:
+                        f.write('\nkerning first=%s second=%s amount=%s' % (key[1]["first"], key[1]["second"], key[1]["amount"]))
                 
                 
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
@@ -277,33 +312,39 @@ for w in range(0,len(fileI)):
                 fnt_data["common"]["scaleH"]= str(ceil(int(fnt_data["common"]["scaleH"]) / 4))
                 fnt_data["page"]["file"]=fnt_data["page"]["file"].replace("-hd", "")
                 
-                dictChar = fnt_data.get("char").items()
-                dictKern = fnt_data.get("kerning").items()
+                if exceptChar==False:
+                    dictChar = fnt_data.get("char").items()
+                if exceptKern==False:
+                    dictKern = fnt_data.get("kerning").items()
                 
-                for key in dictChar:
-                    key[1]["x"]=str(ceil(int(key[1]["x"])/4))
-                    key[1]["y"]=str(ceil(int(key[1]["y"])/4))
-                    key[1]["width"]=str(floor(int(key[1]["width"])/4))
-                    key[1]["height"]=str(floor(int(key[1]["height"])/4))
-                    key[1]["xoffset"]=str(ceil(int(key[1]["xoffset"])/4))
-                    key[1]["yoffset"]=str(ceil(int(key[1]["yoffset"])/4))
-                    key[1]["xadvance"]=str(ceil(int(key[1]["xadvance"])/4))
-                for key in dictKern:
-                    key[1]["amount"]=str(ceil(int(key[1]["amount"])/4))
-            
-            
+                if exceptChar==False:
+                    for key in dictChar:
+                        key[1]["x"]=str(ceil(int(key[1]["x"])/4))
+                        key[1]["y"]=str(ceil(int(key[1]["y"])/4))
+                        key[1]["width"]=str(floor(int(key[1]["width"])/4))
+                        key[1]["height"]=str(floor(int(key[1]["height"])/4))
+                        key[1]["xoffset"]=str(ceil(int(key[1]["xoffset"])/4))
+                        key[1]["yoffset"]=str(ceil(int(key[1]["yoffset"])/4))
+                        key[1]["xadvance"]=str(ceil(int(key[1]["xadvance"])/4))
+                if exceptKern==False:
+                    for key in dictKern:
+                        key[1]["amount"]=str(ceil(int(key[1]["amount"])/4))
+                
+                
                 f.close()
-                f = open((fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt"),'wt')
-            
+                f = open(os.path.join(directory, (fnt_data["page"]["file"].replace('"','')).replace(".png",".fnt")),'wt')
+                
                 f.write('info face=%s size=%s bold=%s italic=%s charset=%s unicode=%s stretchH=%s smooth=%s aa=%s padding=%s spacing=%s' % (fnt_data["info"]["face"], fnt_data["info"]["size"], fnt_data["info"]["bold"], fnt_data["info"]["italic"], fnt_data["info"]["charset"], fnt_data["info"]["unicode"], fnt_data["info"]["stretchH"], fnt_data["info"]["smooth"], fnt_data["info"]["aa"], fnt_data["info"]["padding"], fnt_data["info"]["spacing"]))
                 f.write('\ncommon lineHeight=%s base=%s scaleW=%s scaleH=%s pages=%s packed=%s' % (fnt_data["common"]["lineHeight"], fnt_data["common"]["base"], fnt_data["common"]["scaleW"], fnt_data["common"]["scaleH"], fnt_data["common"]["pages"], fnt_data["common"]["packed"]))
                 f.write('\npage id=%s file=%s' % (fnt_data["page"]["id"], fnt_data["page"]["file"]))
-                f.write('\nchars count=%s' % (fnt_data["chars count"]))
-                for key in dictChar:
-                    f.write('\nchar id=%s     x=%s   y=%s   width=%s   height=%s   xoffset=%s   yoffset=%s   xadvance=%s   page=%s   chnl=%s' % (key[1]["id"], key[1]["x"], key[1]["y"], key[1]["width"], key[1]["height"], key[1]["xoffset"], key[1]["yoffset"], key[1]["xadvance"], key[1]["page"], key[1]["chnl"]))
-                f.write('\nkernings count=%s' % (fnt_data["kernings count"]))
-                for key in dictKern:
-                    f.write('\nkerning first=%s second=%s amount=%s' % (key[1]["first"], key[1]["second"], key[1]["amount"]))
+                if exceptChar==False:
+                    f.write('\nchars count=%s' % (fnt_data["chars count"]))
+                    for key in dictChar:
+                        f.write('\nchar id=%s     x=%s   y=%s   width=%s   height=%s   xoffset=%s   yoffset=%s   xadvance=%s   page=%s   chnl=%s' % (key[1]["id"], key[1]["x"], key[1]["y"], key[1]["width"], key[1]["height"], key[1]["xoffset"], key[1]["yoffset"], key[1]["xadvance"], key[1]["page"], key[1]["chnl"]))
+                if exceptKern==False:
+                    f.write('\nkernings count=%s' % (fnt_data["kernings count"]))
+                    for key in dictKern:
+                        f.write('\nkerning first=%s second=%s amount=%s' % (key[1]["first"], key[1]["second"], key[1]["amount"]))
                 
                 
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
@@ -322,7 +363,7 @@ for w in range(0,len(fileI)):
                 height = ceil(im.shape[0] / 4 )
                 dim = (width, height)
                 resized = cv2.resize(im, dim, interpolation = cv2.INTER_AREA)
-                cv2.imwrite(filenameInput.replace("-uhd","") + ".png",resized)
+                cv2.imwrite(os.path.join(directory, filenameInput.replace("-uhd","")) + ".png",resized)
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
                 if (w+1) == len(fileI):
                     print("Porting finished.")
@@ -335,7 +376,7 @@ for w in range(0,len(fileI)):
                 dim = (width, height)
                 resized = cv2.resize(im, dim, interpolation = cv2.INTER_AREA)
 
-                cv2.imwrite(filenameInput.replace("uhd","hd") + ".png",resized)
+                cv2.imwrite(os.path.join(directory, filenameInput.replace("uhd","hd")) + ".png",resized)
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
                 if (w+1) == len(fileI):
                     print("Porting finished.")
@@ -348,7 +389,7 @@ for w in range(0,len(fileI)):
                 dim = (width, height)
                 resized = cv2.resize(im, dim, interpolation = cv2.INTER_AREA)
 
-                cv2.imwrite(filenameInput.replace("-hd","") + ".png",resized)
+                cv2.imwrite(os.path.join(directory, filenameInput.replace("-hd","")) + ".png",resized)
                 print("Done!(" + str((w+1)) + "/" + str(len(fileI)) + ")")
                 if (w+1) == len(fileI):
                     print("Porting finished.")
