@@ -20,6 +20,7 @@ Some usage examples:
 
 ![An example](https://cdn.discordapp.com/attachments/776630512327458837/848578495340871731/Screenshot_2021-05-30-22-04-43-450_com.termux.png)
 ![Another one but with the -l argument](https://cdn.discordapp.com/attachments/776630512327458837/848580274575900692/Screenshot_2021-05-30-22-14-41-757_com.termux.png)
+
 A bit of warnings: As of v0.5, the accuracy for low ports is really low(unironcally), so don't expect the low ports to be always perfect (same as the medium ports though...)
 
 (You also need to provide a .plist file for the .png sprite you want to port, since this porter just resizes the .png file to half)
